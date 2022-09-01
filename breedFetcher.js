@@ -3,22 +3,23 @@ const request = require("request");
 // https://api.thecatapi.com/v1/breeds/search?q=sib
 
 
-const fetchBreed = (breedName) => {
+const fetchBreedDescription = (breedName, callback) => {
   request(`https://api.thecatapi.com/v1/breeds/search?q=${breedName}`,
     (error, resp, body) => {
       if (error) {
-        console.log("error: failed request");
+        // console.log("error: failed request");
+        return callback(error, null);
       }
       const data = JSON.parse(body);
-      // console.log("body:", body);
-      console.log(data[0].name);
-      console.log(typeof data);
+      const cat = data[0];
+      if (cat) {
+        return callback(null, cat.description);
+      }
     }
-
   );
 };
 
-fetchBreed("sib");
+// fetchBreedDescription("sib");
 // console.log(data.name);
 // const data = JSON.parse(body);
 // console.log(data.name);
@@ -26,3 +27,5 @@ fetchBreed("sib");
 
 
 // request(url, (error, resp, body) => {})
+
+module.exports = { fetchBreedDescription };
